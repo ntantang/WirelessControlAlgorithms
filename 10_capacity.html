@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!-- 
+To Do: Replace text-based status display with bar graph that includes text labels, 
+numeric values, and average or cumulative metrics for the ongoing or most recent 
+simulation interval 
+-->
 <html lang="en-US" style="display: flex;">
 <head>
   <title>HLSI Ex 10</title>
@@ -42,6 +47,11 @@
         <a href="16_programmable_avoidance.html"><b>16</b> Programmable Interferer Avoidance</a>
         <a href="17_machine_learning_avoidance.html"><b>17</b> Machine Learning Interferer Avoidance</a>
         <a href="18_machine_learning_time_based_avoidance.html"><b>18</b> Machine Learning With Periodic Interferer Avoidance</a>
+        <a href="19_rf_front_end_spectrum_sharing.html"><b>19</b> RF Front End Spectrum Sharing</a>
+        <a href="20_rf_front_end_spectrum_sharing.html"><b>20</b> Programmable RF Front End Spectrum Sharing</a>
+        <a href="21_rf_front_end_spectrum_sharing_with_interferer.html"><b>21</b> RF Front End Spectrum Sharing with Interferer</a>
+        <a href="22_rf_front_end_spectrum_sharing_with_interferer.html"><b>22</b> Programmable Spectrum Sharing with Interferer</a>
+        <a href="23_rf_front_end_spectrum_sharing_sliders_programmable.html"><b>23</b> RFFE Spectrum Sharing - Manual and Programmable</a>
       </nav>
       
       <label for="menu-control" class="sidebar__close"></label>
@@ -49,7 +59,7 @@
       
     </aside>
     
-    <div style="margin-left: 6%; font-size: 1.3rem; margin-top: 0.3%; font-family: sans-serif; order: 1; width: inherit;"><span style="color: #ddd;">Exercise 10</span> Information Capacity</div>
+    <div style="margin-left: 6%; font-size: 1.3rem; margin-top: 0.3%; font-family: sans-serif; order: 1; width: inherit;"><span style="color: #ddd;">Exercise 10</span> Information Capacity, Data Rate, and Spectral Efficiency in Fading Channel with Programmable Automatic MCS Adaptation</div>
     <div style="order: 2; margin-left: auto; margin-right: 2%; display: flex;">
       <span style="font-size: 250%; font-family: monospace; letter-spacing: 2px; margin-left: auto; margin-right: 5px; color: #e6d9ba;"></span>
       <div style="width: 20%;">
@@ -58,7 +68,7 @@
     </div>   
   </section>
   
-  <div class="content-section" id="slider_1_parent" style="margin-left: 1%; margin-top:5%;">
+  <div class="content-section" id="slider_1_parent" style="margin-left: 1%; margin-top:8%;">
     <p><label for="userfunction">
       Fill out a function to return the index of modulation/coding scheme
       selection based on SNR, link margin, etc. here

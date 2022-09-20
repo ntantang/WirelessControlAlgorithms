@@ -303,8 +303,11 @@ dragHandler2(svgm.selectAll("use2"));
 update_display();
 update_display2();
 
-function update_display(freq) {
-    if (freq!=null) { fc = freq; }
+    function update_display(freq)
+    {
+        if (freq != null) {
+            fc = freq;
+        }
 
     document.querySelector('#fc').value = d3.format(".2f")((f0+fc*fs)*scale_freq) + " " + units_freq + "Hz";
     document.querySelector('#frequency').value = fc;

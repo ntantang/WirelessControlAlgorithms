@@ -38,7 +38,11 @@ function PowerSpectrumPlot_2D(opts = {}, has_signal=true, has_interferer=true) {
     var freq_plot_max = -1.0;   // small number that we change
 
     // We'll display spectrum from all signals in Signal.env;
-    
+    var wind_speed_min = 0;
+    var wind_speed_max = 0;
+
+    var shipping_quality_min = 0;
+    var shipping_quality_max = 0;
 
 
     Object.keys(Signal.env).forEach(function(key) {
@@ -60,6 +64,14 @@ function PowerSpectrumPlot_2D(opts = {}, has_signal=true, has_interferer=true) {
             freq_plot_min = sig.freq_plot_min;
         if(freq_plot_max < sig.freq_plot_max)
             freq_plot_max = sig.freq_plot_max;
+        if(wind_speed_min > sig.wind_speed_min)
+            wind_speed_min = sig.wind_speed_min;
+        if(wind_speed_max < sig.wind_speed_max)
+            wind_speed_max = sig.wind_speed_max;
+        if(shipping_quality_min > sig.shipping_quality_min)
+            shipping_quality_min = sig.shipping_quality_min;
+        if(shipping_quality_max < sig.shipping_quality_max)
+            shipping_quality_max = sig.shipping_quality_max;
     });
 
 
@@ -251,11 +263,13 @@ function PowerSpectrumPlot_2D(opts = {}, has_signal=true, has_interferer=true) {
             let fc = -0.5 + (sig.freq - sig.freq_plot_min) / df;
             let bw = sig.bw / df;
             let gn = sig.gn;
+            let w =
 
             
             sig.cur_signal_freq = fc;
             sig.cur_signal_bw = bw;
             sig.cur_signal_freq_exact = sig._freq;
+            sig.cur_wind_speed = fc;
             
             
 

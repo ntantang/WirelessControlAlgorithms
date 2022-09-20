@@ -157,6 +157,7 @@ var conf = {
 
         // bool that lets you know this is a special noise signal.
         is_noise: true
+
         // Other non-noise signals with get this bool set to false in the
         // Signal() constructor.
     },

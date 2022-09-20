@@ -394,6 +394,12 @@ function PowerSpectrumPlot_2D_turb(opts = {}, has_signal=true, has_interferer=tr
     var freq_plot_min = 1.0e32; // large number that we change
     var freq_plot_max = -1.0;   // small number that we change
 
+    var wind_speed_min = 0;
+    var wind_speed_max = 0;
+
+    var shipping_activity_min = 0;
+    var shipping_activity_max = 0;
+
     // We'll display spectrum from all signals in Signal.env;
 
 
@@ -417,6 +423,7 @@ function PowerSpectrumPlot_2D_turb(opts = {}, has_signal=true, has_interferer=tr
             freq_plot_min = sig.freq_plot_min;
         if(freq_plot_max < sig.freq_plot_max)
             freq_plot_max = sig.freq_plot_max;
+
     });
 
 
@@ -609,6 +616,12 @@ function PowerSpectrumPlot_2D_turb(opts = {}, has_signal=true, has_interferer=tr
             let bw = sig.bw / df;
             let gn = sig.gn;
 
+            let _nspd_turb = 17 - 30*Math.log(sig.freq);
+            let _nspd_ship = 40 + 20*(_s - 0.5) + 26*Math.log(sig.freq) + -60*Math.log(sig.freq + 0.03);
+            let _nspd_wind = 50 + 7.5*Math.pow(_w, 0.5) + 20*Math.log(sig.freq) - 40*Math.log(sig.freq + 0.4);
+            let _nspd_therm = -15 + 20*Math.log(sig.freq);
+            let nspd =
+
 
             sig.cur_signal_freq = fc;
             sig.cur_signal_bw = bw;
@@ -616,9 +629,11 @@ function PowerSpectrumPlot_2D_turb(opts = {}, has_signal=true, has_interferer=tr
 
 
 
+
             //console.log("fc=" + fc + " bw=" + bw + " gn=" + gn);
             // ! bw (slider %) is limited to 90% range, as log(0) == inf
             generator.add_signal(fc, bw, gn + 10 * Math.log10(bw));
+            generator.add_signal_nspd(fc, w, s, )
             //generator.add_signal(fc, bw, gn);
 
             let signal_bounding_box_new_coordinates = get_bounding_box_coordinates(750, 320, sig.cur_signal_freq, sig.cur_signal_bw);

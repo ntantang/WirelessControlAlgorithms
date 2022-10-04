@@ -108,15 +108,15 @@ function add_pulse(_m, _fc, _bw, _gain, _xi, _xq, _beta) {
 }
 
 // generate pulse into buffer for Noise Power Spectral Density(adding on top of existing signals)
-function add_pulse_nspd(_m, _fc, _bw, _w, _s, _nspd, _xi, _xq, _beta) {
-    let _nspd_turb = 17 - 30*Math.log(_fc);
-    let _nspd_ship = 40 + 20*(_s - 0.5) + 26*Math.log(_fc) + -60*Math.log(_fc + 0.03);
-    let _nspd_wind = 50 + 7.5*Math.pow(_w, 0.5) + 20*Math.log(_fc) - 40*Math.log(_fc + 0.4);
-    let _nspd_therm = -15 + 20*Math.log(_fc);
+function add_pulse_npsd(_m, _fc, _bw, _w, _s, _npsd, _xi, _xq, _beta) {
+    let _npsd_turb = 17 - 30*Math.log(_fc);
+    let _npsd_ship = 40 + 20*(_s - 0.5) + 26*Math.log(_fc) + -60*Math.log(_fc + 0.03);
+    let _npsd_wind = 50 + 7.5*Math.pow(_w, 0.5) + 20*Math.log(_fc) - 40*Math.log(_fc + 0.4);
+    let _npsd_therm = -15 + 20*Math.log(_fc);
 
     for (var i = 0; i < 2*_m +1; i++) {
         let p = pulse(i, _m, _bw, _beta);
-        _nspd[i] = (Math.pow(_nspd_turb, 10) + Math.pow(_nspd_ship, 10) + Math.pow(_nspd_wind, 10) + Math.pow(_nspd_therm, 10)) * p;
+        _npsd[i] = (Math.pow(_npsd_turb, 10) + Math.pow(_npsd_ship, 10) + Math.pow(_npsd_wind, 10) + Math.pow(_npsd_therm, 10)) * p;
     }
 }
 
@@ -131,16 +131,16 @@ function add_tone(_m, _fc, _gain, _xi, _xq, _beta) {
 }
 
 // generate tone into buffer for Noise Power Spectral Density(adding on top of existing signals)
-function add_tone_nspd(_m, _fc, _w, _s, _nspd, _xi, _xq, _beta) {
+function add_tone_npsd(_m, _fc, _w, _s, _npsd, _xi, _xq, _beta) {
 
-    let _nspd_turb = (_nspd_turb==null ? 1: 17 - 30*Math.log(_fc)) / _m;
-    let _nspd_ship = (_nspd_ship==null ? 1: 40 + 20*(_s - 0.5) + 26*Math.log(_fc) + -60*Math.log(_fc + 0.03)) / _m;
-    let _nspd_wind = (_nspd_wind==null ? 1: 50 + 7.5*Math.pow(_w, 0.5) + 20*Math.log(_fc) - 40*Math.log(_fc + 0.4)) / _m;
-    let _nspd_therm = (_nspd_therm==null ? 1: -15 + 20*Math.log(_fc)) / _m;
+    let _npsd_turb = (_npsd_turb==null ? 1: 17 - 30*Math.log(_fc)) / _m;
+    let _npsd_ship = (_npsd_ship==null ? 1: 40 + 20*(_s - 0.5) + 26*Math.log(_fc) + -60*Math.log(_fc + 0.03)) / _m;
+    let _npsd_wind = (_npsd_wind==null ? 1: 50 + 7.5*Math.pow(_w, 0.5) + 20*Math.log(_fc) - 40*Math.log(_fc + 0.4)) / _m;
+    let _npsd_therm = (_npsd_therm==null ? 1: -15 + 20*Math.log(_fc)) / _m;
 
     for (var i=0; i<2*_m+1; i++) {
         let p = cwindow(i, _m, _beta);
-        _nspd[i] = (Math.pow(_nspd_turb, 10) + Math.pow(_nspd_ship, 10) + Math.pow(_nspd_wind, 10) + Math.pow(_nspd_therm, 10)) * p;
+        _npsd[i] = (Math.pow(_npsd_turb, 10) + Math.pow(_npsd_ship, 10) + Math.pow(_npsd_wind, 10) + Math.pow(_npsd_therm, 10)) * p;
     }
 }
 
@@ -182,8 +182,8 @@ function siggen(nfft)
     }
 
     // generate signals in the time-domain buffer for NSPD
-    this.add_signal_nspd = function(_fc, _w, _s, _nspd) {
-        add_pulse_nspd(this.m, _fc, _w, _s, _nspd, this.xi, this.xq, this.beta)
+    this.add_signal_npsd = function(_fc, _w, _s, _npsd) {
+        add_pulse_npsd(this.m, _fc, _w, _s, _npsd, this.xi, this.xq, this.beta)
     }
 
     // add tone in time-domain buffer
@@ -191,9 +191,9 @@ function siggen(nfft)
         add_tone(this.m, _fc, _gain, this.xi, this.xq, this.beta);
     }
 
-    this.add_tone_nspd = function(_fc, _w, _s, _nspd)
+    this.add_tone_npsd = function(_fc, _w, _s, _npsd)
     {
-        add_tone_nspd(this.m, _fc, _w, _s, _nspd, this.xi, this.xq, this.beta)
+        add_tone_npsd(this.m, _fc, _w, _s, _npsd, this.xi, this.xq, this.beta)
     }
     // add noise to time-domain buffer
     this.add_noise = function(noise_floor_dB) {

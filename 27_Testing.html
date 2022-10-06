@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" type="text/css" media="all" href="base.css">
     <link rel=stylesheet type=text/css href=sidebar.css />
+    <script src=sliders.js></script>
 </head>
 
 
@@ -17,6 +18,7 @@
 
     <!-- Assigning the color of the background, and created a header/banner with a hamburger icon on the top left for the sidebar-->
     <section class="banner" style="position: fixed; z-index: 11; background: rgba(0,0,0,0.85)">
+       
         <label for="menu-control" class="hamburger">
             <i class="hamburger__icon"></i>
             <i class="hamburger__icon"></i>
@@ -65,4 +67,75 @@
           </aside>
 
 
+    <div style="margin-left: 6%; font-size: 1.3rem; margin-top: 0.3%; font-family: sans-serif; order: 1; width: inherit;"><span style="color: #ddd;">Exercise 27</span> Acoustic Link Capacities</div>
+    <div style="order: 2; margin-left: auto; margin-right: 2%; display: flex;">
+    <span style="font-size: 250%; font-family: monospace; letter-spacing: 2px; margin-left: auto; margin-right: 5px; color: #e6d9ba;"></span>
+    <div style="width: 20%;">
+    <img style="width: 100%;" src="images/wireless-logo.png">
+    </div>
+    </div>   
+
+  </section>
+
+      <style>
+      input.slider_bw{
+        width: auto;
+      }
+    </style>
+ 
+
+        
+  <div class="content-section" style="margin: 0% 2%; margin-top: 8%;">
+    <!-- <p id=hoppingInterferer>
+    </p> -->
+  
+    <p id=capacityBanner style="display: none;">
+    </p>
+
+      
+    <div style="display: inline-flex; width: 100%;">
+      <div style="width: 25%;">
+        <div style="font-size: 110%; color: #ff6b6b">Comm Link 1</div> 
+        <p>
+          <input type="range" id=freq1 />
+        </p>
+        <p>
+          <input type="range" id=bw1 />
+        </p>
+        <p>
+          <input type="range" id=gn1 />
+        </p>
+        <p>
+          <input type="range" id=mcs1 />
+        </p>
+      </div>f
+
+        </body>
+
+<script>
+'use strict';
+
+    console.log("Testing");
+
+var sig1 = Signal(JSON.parse(JSON.stringify(conf.signal_multi)), '', 
+{
+    bw_max: 38.0e6, // Hz
+    bw_min: 4.0e6,  // Hz
+    bw_init: 4.0e6, // Hz
+    gn_init: -10, // dB
+    gn_min: -40, // dB
+    mcs_init: 6, // array index int
+    freq_init: 1785.0e6
+});
+
+Slider(sig1, 'freq', '#freq1');
+Slider(sig1, 'bw', '#bw1');
+Slider(sig1, 'gn', '#gn1');
+Slider(sig1, 'mcs', '#mcs1');
+
+PowerSpectrumPlot_2D();
+ThroughputPlot([sig1]); //<!--, sig2, sig3, sig4-->
+SpectralEfficiencyPlot_BarChart.init([sig1, sig2, sig3, sig4], "spectral-efficiency-bar-chart", ["Comm Link 1", "Comm Link 2", "Comm Link 3", "Comm Link 4", "Average Total"]);
+
+</script>
 </html>

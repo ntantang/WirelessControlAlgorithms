@@ -157,7 +157,6 @@ var conf = {
 
         // bool that lets you know this is a special noise signal.
         is_noise: true
-
         // Other non-noise signals with get this bool set to false in the
         // Signal() constructor.
     },
@@ -514,7 +513,7 @@ function Signal(sig, name = "", opts = null) {
     // changes happen from a setter being set, or in the case of the
     // parameter/variable "rate" a parameter/variable in one of the
     // dependency signals independent parameter/variables changing.
-    obj._callbacks = { 
+    obj._callbacks = {
         // These are independent variables:
         freq: [], bw: [], gn: [], mcs: [],
         // These are dependent variables.
@@ -640,7 +639,7 @@ function Signal(sig, name = "", opts = null) {
             obj._sinr = new_sinr;
 
         // if the new rate and old rate are the same we do not
-        // trigger rate events. 
+        // trigger rate events.
         if(obj._rate !== new_rate) {
 
             obj._rate = new_rate;

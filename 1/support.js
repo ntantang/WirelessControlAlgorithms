@@ -4,8 +4,8 @@ function svg_create(_margin, _width, _height, _xscale, _yscale)
     var svg = d3.select("body").append("svg")
         .attr("width",  _width  + _margin.left + _margin.right)
         .attr("height", _height + _margin.top +  _margin.bottom)
-      .append("g")
-	  .attr("class", "graph-svg-component")
+        .append("g")
+        .attr("class", "graph-svg-component")
         .attr("transform", "translate(" + _margin.left + "," + _margin.top + ")");
 
     // create axes
@@ -15,10 +15,10 @@ function svg_create(_margin, _width, _height, _xscale, _yscale)
     svg.append("g").attr("class", "y axis")
         .call(d3.axisLeft(_yscale));
 
-	svg.append("rect")
-		.attr("width", "86.2%")
-		.attr("height", "81%")
-		.attr("fill", "black");
+    svg.append("rect")
+        .attr("width", "86.2%")
+        .attr("height", "81%")
+        .attr("fill", "black");
     // create grid lines
     svg.append("g").attr("class","grid").call(d3.axisBottom(_xscale).tickFormat("").tickSize( _height));
     svg.append("g").attr("class","grid").call(d3.axisLeft  (_yscale).tickFormat("").tickSize(- _width));
@@ -29,22 +29,22 @@ function svg_add_labels(_svg, _margin, _width, _height, _xlabel, _ylabel)
 {
     // create x-axis axis label
     _svg.append("text")
-       .attr("transform","translate("+(_width/2)+","+(_height + 0.75*_margin.bottom)+")")
-       .attr("dy","-0.3em")
-       .style("text-anchor","middle")
-		.attr("fill", "white")
-       .text(_xlabel)
+        .attr("transform","translate("+(_width/2)+","+(_height + 0.75*_margin.bottom)+")")
+        .attr("dy","-0.3em")
+        .style("text-anchor","middle")
+        .attr("fill", "white")
+        .text(_xlabel)
 
 
     // create y-axis label
     _svg.append("text")
-       .attr("transform","rotate(-90)")
-       .attr("y", 0 - _margin.left)
-       .attr("x", 0 - (_height/2))
-       .attr("dy", "1em")
-       .style("text-anchor","middle")
-		.attr("fill", "white")
-       .text(_ylabel)
+        .attr("transform","rotate(-90)")
+        .attr("y", 0 - _margin.left)
+        .attr("x", 0 - (_height/2))
+        .attr("dy", "1em")
+        .style("text-anchor","middle")
+        .attr("fill", "white")
+        .text(_ylabel)
 
 }
 
@@ -107,19 +107,6 @@ function add_pulse(_m, _fc, _bw, _gain, _xi, _xq, _beta) {
     }
 }
 
-// generate pulse into buffer for Noise Power Spectral Density(adding on top of existing signals)
-function add_pulse_npsd(_m, _fc, _bw, _w, _s, _npsd, _xi, _xq, _beta) {
-    let _npsd_turb = 17 - 30*Math.log(_fc);
-    let _npsd_ship = 40 + 20*(_s - 0.5) + 26*Math.log(_fc) + -60*Math.log(_fc + 0.03);
-    let _npsd_wind = 50 + 7.5*Math.pow(_w, 0.5) + 20*Math.log(_fc) - 40*Math.log(_fc + 0.4);
-    let _npsd_therm = -15 + 20*Math.log(_fc);
-
-    for (var i = 0; i < 2*_m +1; i++) {
-        let p = pulse(i, _m, _bw, _beta);
-        _npsd[i] = (Math.pow(_npsd_turb, 10) + Math.pow(_npsd_ship, 10) + Math.pow(_npsd_wind, 10) + Math.pow(_npsd_therm, 10)) * p;
-    }
-}
-
 // generate tone into buffer (adding on top of existing signals)
 function add_tone(_m, _fc, _gain, _xi, _xq, _beta) {
     let gain = (_gain==null ? 1 : Math.pow(10,_gain/20)) / _m;
@@ -127,20 +114,6 @@ function add_tone(_m, _fc, _gain, _xi, _xq, _beta) {
         let p = cwindow(i, _m, _beta);
         _xi[i] += gain * Math.cos(2*Math.PI*_fc*i) * p;
         _xq[i] += gain * Math.sin(2*Math.PI*_fc*i) * p;
-    }
-}
-
-// generate tone into buffer for Noise Power Spectral Density(adding on top of existing signals)
-function add_tone_npsd(_m, _fc, _w, _s, _npsd, _xi, _xq, _beta) {
-
-    let _npsd_turb = (_npsd_turb==null ? 1: 17 - 30*Math.log(_fc)) / _m;
-    let _npsd_ship = (_npsd_ship==null ? 1: 40 + 20*(_s - 0.5) + 26*Math.log(_fc) + -60*Math.log(_fc + 0.03)) / _m;
-    let _npsd_wind = (_npsd_wind==null ? 1: 50 + 7.5*Math.pow(_w, 0.5) + 20*Math.log(_fc) - 40*Math.log(_fc + 0.4)) / _m;
-    let _npsd_therm = (_npsd_therm==null ? 1: -15 + 20*Math.log(_fc)) / _m;
-
-    for (var i=0; i<2*_m+1; i++) {
-        let p = cwindow(i, _m, _beta);
-        _npsd[i] = (Math.pow(_npsd_turb, 10) + Math.pow(_npsd_ship, 10) + Math.pow(_npsd_wind, 10) + Math.pow(_npsd_therm, 10)) * p;
     }
 }
 
@@ -181,20 +154,11 @@ function siggen(nfft)
         add_pulse(this.m, _fc, _bw, _gain, this.xi, this.xq, this.beta);
     }
 
-    // generate signals in the time-domain buffer for NSPD
-    this.add_signal_npsd = function(_fc, _w, _s, _npsd) {
-        add_pulse_npsd(this.m, _fc, _w, _s, _npsd, this.xi, this.xq, this.beta)
-    }
-
     // add tone in time-domain buffer
     this.add_tone = function(_fc, _gain) {
         add_tone(this.m, _fc, _gain, this.xi, this.xq, this.beta);
     }
 
-    this.add_tone_npsd = function(_fc, _w, _s, _npsd)
-    {
-        add_tone_npsd(this.m, _fc, _w, _s, _npsd, this.xi, this.xq, this.beta)
-    }
     // add noise to time-domain buffer
     this.add_noise = function(noise_floor_dB) {
         // compute noise standard deviation, compensating for fft size and I/Q components
@@ -209,7 +173,7 @@ function siggen(nfft)
     this.generate = function(noise_floor_dB) {
         // compute noise floor (minimum prevents possibility of log of zero)
         if (noise_floor_dB==null)
-            { noise_floor_dB = -120; }
+        { noise_floor_dB = -120; }
         let noise_floor = Math.max(1e-12, Math.pow(10.,noise_floor_dB/10));
 
         // apply compression
@@ -249,4 +213,3 @@ function prng_bbs()
         return (this.v & (this.res-1)) / this.res;
     }
 }
-

@@ -86,9 +86,26 @@ sig.bw = 8.0e6; // 8 MHz
 
 Signal(conf.noise).gn = -60.0;
 
-Slider(sig, 'freq', null, "slider_1_parent");
-Slider(sig, 'bw', null, "slider_1_parent");
-Slider(sig, 'gn', null, "slider_1_parent");
+
+Slider(sig1, 'freq', '#freq1');
+Slider(sig1, 'bw', '#bw1');
+Slider(sig1, 'gn', '#gn1');
+Slider(sig1, 'mcs', '#mcs1');
+
+Slider(sig2, 'freq', '#freq2');
+Slider(sig2, 'bw', '#bw2');
+Slider(sig2, 'gn', '#gn2');
+Slider(sig2, 'mcs', '#mcs2');
+
+Slider(sig3, 'freq', '#freq3');
+Slider(sig3, 'bw', '#bw3');
+Slider(sig3, 'gn', '#gn3');
+Slider(sig3, 'mcs', '#mcs3');
+
+Slider(sig4, 'freq', '#freq4');
+Slider(sig4, 'bw', '#bw4');
+Slider(sig4, 'gn', '#gn4');
+Slider(sig4, 'mcs', '#mcs4');
 
 IQPlot(sig);
 

@@ -1,54 +1,17 @@
 ﻿<!DOCTYPE html>
-<!--
-To Do: Fix callback functions; Add Guard Bands w/ flashing "too-close" indicator, Guard Band menu 
-with options for fixed, receiver-dependent, e.g., lower minimum for Links 1, 2, and 4, higher for 
-Link 3; Separately, a switch to select ideal SINR w/o ACI vs. receiver-dependent ACI-based SINR
--->
 <html lang="en-US" style="display: flex;">
 <head>
-  <title>HLSI Ex 23</title>
+  <title>HLSI Ex 25</title>
   <meta charset="UTF-8"/>
   <link rel="stylesheet" type="text/css" media="all" href="hlsi.css">
-  <link rel=stylesheet type=text/css href=codemirror.min.css />
-  <link rel=stylesheet type=text/css href=blackboard.min.css />
   <link rel=stylesheet type=text/css href=sidebar.css />
-  <style>
-    output {font-weight: bold;}
-
-    .argsTable{
-      height: 480px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      display: block;
-    }
-  </style>
   <script src=d3.v5.min.js></script>
   <script src=fft.js></script>
   <script src=common.js></script>
   <script src=signal.js></script>
-  <!-- <script src=sliders.js></script> -->
-  <script src=slidersMultiSignals.js></script>
-  <!-- <script src=powerSpectrumPlot.js></script> -->
-  <script src=powerSpectrumPlot_2D_MultiSignals.js></script>
-  <script src=powerSpectrumPlot_3D_MultiSignals.js></script>
-  <script src=spectralEfficiencyPlot_BarChart.js></script>
-  <script src=label.js></script>
-  <script src=capacityBanner.js></script>
-  <!-- <script src=throughputPlot.js></script> -->
-  <script src=codemirror.min.js></script>
-  <script src=codeMirror_javascript.js></script>
-  <script src=scriptController.js></script>
-  <script src=throughputPlotMultiSignals.js></script>
-  <script src=hoppingInterferer.js></script>
-  <script src="https://unpkg.com/d3-simple-slider"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-
-  <style>
-    input.slider_bw{
-      width: auto;
-    }
-  </style>
+  <script src=sliders.js></script>
+  <script src=powerSpectrumPlot.js></script>
+  <script src=iqPlot.js></script>
 </head>
 
 
@@ -89,7 +52,7 @@ Link 3; Separately, a switch to select ideal SINR w/o ACI vs. receiver-dependent
           <a href="22_rf_front_end_spectrum_sharing_with_interferer.html"><b>22</b> Programmable Spectrum Sharing with Interferer</a>
           <a href="23_rf_front_end_spectrum_sharing_sliders_programmable.html"><b>23</b> RFFE Spectrum Sharing - Manual and Programmable</a>
           <a href="24_pathloss.html"><b>24</b> Pathloss</a>
-          <a href="25_underwater_communications_introduction.html"><b>25</b></a>
+          <a href="25_underwater_communications_introduction.html"><b>25</b></a> Introduction to Underwater Communications</a>
           <a href="26_different_underwater_communications.html"><b>26</b> Different Underwater Communications</a>
           <a href="27_acoustic_link_capacities.html"><b>27</b> Acoustic Link Capacities</a>
           <a href="28_transmitter_receiver_acoustic_capabilities_with_jammer.html"><b>28</b> Transmitter Receiver Acoustic Capabilities with Jammer</a>
@@ -101,7 +64,7 @@ Link 3; Separately, a switch to select ideal SINR w/o ACI vs. receiver-dependent
 
   </aside>
 
-  <div style="margin-left: 6%; font-size: 1.3rem; margin-top: 0.3%; font-family: sans-serif; order: 1; width: inherit;"><span style="color: #ddd;">Exercise 23</span> Spectrum Sharing -- Manual and Programmable</div>
+  <div style="margin-left: 6%; font-size: 1.3rem; margin-top: 0.3%; font-family: sans-serif; order: 1; width: inherit;"><span style="color: #ddd;">Exercise 25</span> Introduction to Underwater Communications</div>
   <div style="order: 2; margin-left: auto; margin-right: 2%; display: flex;">
     <span style="font-size: 250%; font-family: monospace; letter-spacing: 2px; margin-left: auto; margin-right: 5px; color: #e6d9ba;"></span>
     <div style="width: 20%;">
@@ -118,7 +81,7 @@ Link 3; Separately, a switch to select ideal SINR w/o ACI vs. receiver-dependent
 
   <div style="display: inline-flex; width: 100%;">
     <div style="width: 25%;">
-      <div style="font-size: 110%; color: #ff6b6b">Comm Link 1</div>
+      <div style="font-size: 110%; color: #ff6b6b">Radio Frequency (RF)</div>
       <p>
         <input type="range" id=freq1 />
       </p>
@@ -134,7 +97,7 @@ Link 3; Separately, a switch to select ideal SINR w/o ACI vs. receiver-dependent
     </div>
 
     <div style="width: 25%;">
-      <div style="font-size: 110%; color: #b5ebff">Comm Link 2</div>
+      <div style="font-size: 110%; color: #b5ebff">Acoustic</div>
       <p>
         <input type="range" id=freq2 />
       </p>
@@ -146,38 +109,6 @@ Link 3; Separately, a switch to select ideal SINR w/o ACI vs. receiver-dependent
       </p>
       <p>
         <input type="range" id=mcs2 />
-      </p>
-    </div>
-
-    <div style="width: 25%;">
-      <div style="font-size: 110%; color: #afffd3">Comm Link 3</div>
-      <p>
-        <input type="range" id=freq3 />
-      </p>
-      <p>
-        <input type="range" id=bw3 />
-      </p>
-      <p>
-        <input type="range" id=gn3 />
-      </p>
-      <p>
-        <input type="range" id=mcs3 />
-      </p>
-    </div>
-
-    <div style="width: 25%;">
-      <div style="font-size: 110%; color: #ffe699">Comm Link 4</div>
-      <p>
-        <input type="range" id=freq4 />
-      </p>
-      <p>
-        <input type="range" id=bw4 />
-      </p>
-      <p>
-        <input type="range" id=gn4 />
-      </p>
-      <p>
-        <input type="range" id=mcs4 />
       </p>
     </div>
   </div>
@@ -193,23 +124,14 @@ Link 3; Separately, a switch to select ideal SINR w/o ACI vs. receiver-dependent
   <div style="width: 30%; display:inline-flex; margin-left:1%;">
     <div style="display: inline-flex;">
       <div style="width: 28px; height: 15px; background:rgba(163,36,36,255)"></div>
-      <div style="margin-left: 5px; overflow: hidden; white-space: nowrap;">Comm Link 1</div>
+      <div style="margin-left: 5px; overflow: hidden; white-space: nowrap;">Radio Frequency (RF)</div>
     </div>
 
     <div style="display: inline-flex; margin-left: 10px;">
       <div style="width: 28px; height: 15px; background:rgba(0,176,240,255);"></div>
-      <div style="margin-left: 5px; overflow: hidden; white-space: nowrap;">Comm Link 2</div>
+      <div style="margin-left: 5px; overflow: hidden; white-space: nowrap;">Acoustic</div>
     </div>
 
-    <div style="display: inline-flex; margin-left: 10px;">
-      <div style="width: 28px; height: 15px; background:rgba(36,124,76,255);"></div>
-      <div style="margin-left: 5px; overflow: hidden; white-space: nowrap;">Comm Link 3</div>
-    </div>
-
-    <div style="display: inline-flex; margin-left: 10px;">
-      <div style="width: 28px; height: 15px; background:rgba(255,192,0,255);"></div>
-      <div style="margin-left: 5px; overflow: hidden; white-space: nowrap;">Comm Link 4</div>
-    </div>
   </div>
 </div>
 
@@ -225,58 +147,12 @@ Link 3; Separately, a switch to select ideal SINR w/o ACI vs. receiver-dependent
   'use strict';
 
 
-  var sig1 = Signal(JSON.parse(JSON.stringify(conf.signal_multi)), '', {
-    bw_max: 38.0e6, // Hz
-    bw_min: 4.0e6,  // Hz
-    bw_init: 4.0e6, // Hz
-    gn_init: -10, // dB
-    gn_min: -40, // dB
-    mcs_init: 6, // array index int
-    freq_init: 1785.0e6
-  });
-
-  var sig2 = Signal(JSON.parse(JSON.stringify(conf.signal_multi)), '', {
-    bw_max: 38.0e6, // Hz
-    bw_min: 4.0e6,  // Hz
-    bw_init: 4.0e6, // Hz
-    gn_init: -10, // dB
-    gn_min: -40, // dB
-    mcs_init: 6, // array index int
-    freq_init: 1795.0e6
-  });
-
-  var sig3 = Signal(JSON.parse(JSON.stringify(conf.signal_multi)), '', {
-    bw_max: 38.0e6, // Hz
-    bw_min: 4.0e6,  // Hz
-    bw_init: 4.0e6, // Hz
-    gn_init: -10, // dB
-    gn_min: -40, // dB
-    mcs_init: 6, // array index int
-    freq_init: 1805.0e6
-  });
-
-  var sig4 = Signal(JSON.parse(JSON.stringify(conf.signal_multi)), '', {
-    bw_max: 38.0e6, // Hz
-    bw_min: 4.0e6,  // Hz
-    bw_init: 4.0e6, // Hz
-    gn_init: -10, // dB
-    gn_min: -40, // dB
-    mcs_init: 6, // array index int
-    freq_init: 1815.0e6
-  });
-
-  // sig1['name'] = "comm_link_1";
-  // sig2['name'] = "comm_link_2";
-  // sig3['name'] = "comm_link_3";
-  // sig4['name'] = "comm_link_4";
-
-  // var interferer = new Signal(conf.sig0, 'interferer', {
-  //     bw_max: 38.0e6, // Hz
-  //     bw_init: 2.5e6, // Hz
-  //     gn_init: -12, // dB
-  //     gn_min: -40, // dB
-  //     freq_init: 1785.0e6 // Hz
-  // });
+  // This sig contains all the constant parameters associated with the
+  // signal and also the 4 changing parameters (independent variables)
+  // sig.freq, sig.gn, sig.bw, and sig.mcs (center frequency, gain,
+  // bandwidth, and modulation scheme index), in addition to dependent
+  // variables sig.rate and sig.sinr.
+  //
 
   Slider(sig1, 'freq', '#freq1');
   Slider(sig1, 'bw', '#bw1');
@@ -329,7 +205,7 @@ Link 3; Separately, a switch to select ideal SINR w/o ACI vs. receiver-dependent
   // HoppingInterferer(interferer, '#hoppingInterferer');
   CapacityBanner(sig1, '#capacityBanner');
 
-  PowerSpectrumPlot_2D_npsd();
+  PowerSpectrumPlot_2D();
   ThroughputPlot([sig1, sig2, sig3, sig4]);
 
   // document.body.innerHTML+= `<div style="width: 720px; height: 320px;">

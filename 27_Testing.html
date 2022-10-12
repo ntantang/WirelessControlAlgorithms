@@ -4,11 +4,33 @@
 <!--Creating the title -->
 <head>
     <title>27 - Acoustic Link Capacities</title>
-    <meta charset="UTF-8" />
+   
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" type="text/css" media="all" href="base.css">
-    <link rel=stylesheet type=text/css href=sidebar.css />
     <script src=sliders.js></script>
+        <meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="hlsi.css">
+    <link rel=stylesheet type=text/css href=sidebar.css />
+    <style> 
+        output {font-weight: bold;}
+    </style>
+    <script src=d3.v5.min.js></script>
+    <script src=fft.js></script>
+    <script src=common.js></script>
+    <script src=signal.js></script>
+    <!-- <script src=sliders.js></script> -->
+    <script src=slidersMultiSignals.js></script>
+    <!-- <script src=powerSpectrumPlot.js></script> -->
+    <script src=powerSpectrumPlot_2D_MultiSignals.js></script>
+    <script src=powerSpectrumPlot_3D_MultiSignals.js></script>
+    <script src=spectralEfficiencyPlot_BarChart.js></script>
+    <script src=label.js></script>
+    <script src=capacityBanner.js></script>
+    <!-- <script src=throughputPlot.js></script> -->
+    <script src=throughputPlotMultiSignals.js></script>
+    <script src=hoppingInterferer.js></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 </head>
 
 
@@ -108,9 +130,12 @@
         <p>
           <input type="range" id=mcs1 />
         </p>
-      </div>f
+      </div>
 
-        </body>
+  <div style="width: 720px; height: 320px; display: inline-block;">
+      <canvas id="spectral-efficiency-bar-chart" style="width: 100%; height: 100%; margin-top:-25px;"></canvas>
+  </div>
+</body>
 
 <script>
 'use strict';
@@ -133,9 +158,9 @@ Slider(sig1, 'bw', '#bw1');
 Slider(sig1, 'gn', '#gn1');
 Slider(sig1, 'mcs', '#mcs1');
 
-PowerSpectrumPlot_2D();
-ThroughputPlot([sig1]); //<!--, sig2, sig3, sig4-->
-SpectralEfficiencyPlot_BarChart.init([sig1, sig2, sig3, sig4], "spectral-efficiency-bar-chart", ["Comm Link 1", "Comm Link 2", "Comm Link 3", "Comm Link 4", "Average Total"]);
+//PowerSpectrumPlot_2D();
+ThroughputPlot([sig1]); //<!--, sig2, sig3, sig4--> 
+SpectralEfficiencyPlot_BarChart.init([sig1], "spectral-efficiency-bar-chart", ["Comm Link 1", "Comm Link 2", "Comm Link 3", "Comm Link 4", "Average Total"]);
 
 </script>
 </html>

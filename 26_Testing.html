@@ -89,8 +89,8 @@
             <label for="menu-control" class="sidebar__close"></label>
         </aside>
 
-
-        <div style="margin-left: 6%; font-size: 1.3rem; margin-top: 0.3%; font-family: sans-serif; order: 1; width: inherit;"><span style="color: #ddd;">Exercise 26</span> Different Underwater Communications</div>
+        <!-- changes the style of the banner and the Ex. # Title size adn font and color-->
+        <div style="margin-left: 6%; font-size: 1.0rem; margin-top: 0.3%; font-family: sans-serif; order: 1; width: inherit;"><span style="color: #ddd;">Exercise 26</span> Different Underwater Communications</div>
         <div style="order: 2; margin-left: auto; margin-right: 2%; display: flex;">
             <span style="font-size: 250%; font-family: monospace; letter-spacing: 2px; margin-left: auto; margin-right: 5px; color: #e6d9ba;"></span>
             <div style="width: 20%;">
@@ -101,11 +101,42 @@
     </section>
 
     <body>
-        <p> This exercise is about ... </p>
+        <div style="position: absolute; left: 30px; top: 80px; color: #31BAFA;">
+            This exercise outlines the differences in the types of underwater communications (RF, MI, Optic, and Acoustic). It shows why we use acoustic and how it has a better range and reliability between underwater versus the other communications. It will also explain the different communication ranges and the Path Loss of other communication types.
+        </div>
     </body>
 
+    
+    <div class="content-section" id="slider_1_parent" style="margin-left: 11%; margin-top:63%;">
+        <p>
+            <label for="frequency">Frequency</label>
+            <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="frequency" step="0.001"
+                   oninput="update_display(parseFloat(value))">
+            <output for="frequency" id="fc">0.1</output>
+        </p>
+        <p>
+            <label for="wavelength">Wavelength = </label>
+            <output for="wavelength" id="wl"></output>
+        </p>
+        <p>
+            <label for="distance">Distance = </label>
+            <output for="distance" id="ds"></output>
+        </p>
+        <p>
+            <label for="pathloss">Path Loss = </label>
+            <output for="pathloss" id="pl"></output>
+        </p>
+    </div>
 
-    <style>
+
+
+
+
+</html>
+
+  
+
+    <!--<style>
         input.slider_bw {
             width: auto;
         }
@@ -113,17 +144,17 @@
 
 
 
-    <div class="content-section" style="margin: 0% 2%; margin-top: 8%;">
+    <div class="content-section" style="margin: 0% 2%; margin-top: 8%;">-->
         <!-- <p id=hoppingInterferer>
         </p> -->
 
-        <p id=capacityBanner style="display: none;">
+        <!--<p id=capacityBanner style="display: none;">
         </p>
 
 
         <div style="display: inline-flex; width: 100%;">
             <div style="width: 25%;">
-                <div style="font-size: 110%; color: #ff6b6b">Comm Link 1</div>
+                <div style="font-size: 110%; left:80px; top:120px; color: #ff6b6b">Comm Link 1</div>
                 <p>
                     <input type="range" id=freq1 />
                 </p>
@@ -142,6 +173,8 @@
                 <canvas id="spectral-efficiency-bar-chart" style="width: 100%; height: 100%; margin-top:-25px;"></canvas>
             </div>
 </body>
+
+
 
 <script>
     'use strict';
@@ -163,10 +196,14 @@
     Slider(sig1, 'bw', '#bw1');
     Slider(sig1, 'gn', '#gn1');
     Slider(sig1, 'mcs', '#mcs1');
+    Slider(sig1, 'distance', '#distance1');
 
     //PowerSpectrumPlot_2D();
     ThroughputPlot([sig1]); //<!--, sig2, sig3, sig4-->
-    SpectralEfficiencyPlot_BarChart.init([sig1], "spectral-efficiency-bar-chart", ["Comm Link 1", "Comm Link 2", "Comm Link 3", "Comm Link 4", "Average Total"]);
+
+
+   <!--SpectralEfficiencyPlot_BarChart.init([sig1], "spectral-efficiency-bar-chart", ["Comm Link 1", "Comm Link 2", "Comm Link 3", "Comm Link 4", "Average Total"]);
 
 </script>
-</html>
+    </html>-->
+ 

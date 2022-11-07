@@ -99,13 +99,45 @@
     </section>
 
     <head>
-        <title> Simulation: </title>
+        <div class="center">
+            <p><br /> <br />Simulation:</p>
+        </div>
     </head>
     <body>
-        <p>This exercise outlines the differences in the types of underwater communications 
-        (RF, MI, Optic, and Acoustic). It shows why we use acoustic and how it has a better range 
-        and reliability between underwater versus the other communications. It will also explain 
-        the different communication ranges and the Path Loss of other communication types.</p>
+        <p>
+            This exercise outlines the differences in the types of underwater communications
+            (RF, MI, Optic, and Acoustic). It shows why we use acoustic and how it has a better range
+            and reliability between underwater versus the other communications. It will also explain
+            the different communication ranges and the Path Loss of other communication types.
+            <br />
+            <br />
+
+            Radio Frequency (RF):       <br />
+            Electromagnetic signals such as radio frequency signals die off quickly in water which is why
+            it is impossible to communicate with lots of distance without a high power transmitter
+            <br />
+            <br />
+
+            Acoustic:      <br />
+            Acoustic models are best used to send and receive signals underwater as they achieve practical
+            ranges. The issue with Acoustic communication links is that there are large propagation delays
+            since the speed of sound in water is a lot slower than the EM waves in the air.
+            Acoustic communicaiton also suffers from low bandwidth which limits the amount of information
+            that can be sent.
+            <br />
+            <br />
+
+            Magnetic Induction (MI):      <br />
+            This method of communication features almost zero propagation delay, however, the range is limited.
+            <br />
+            <br />
+
+            Optical:      <br />
+            Optical technologies have been used for underwater communications by using laser diodes (LEDs) for
+            line-of-sight communication. Optical communications provides a higher data rate and a lower latency rate
+            than acoustic communication, however, the range is limited.
+            This type of communication however, can be used to recover data wirelessly from sensors that are underwater.
+        </p>
 </body>
 
     <div class="content-section" id="slider_1_parent" style="margin-left: 10%; margin-top: 6%;">
@@ -217,6 +249,7 @@
 
 
         ThroughputPlot([sig1, sig2, sig3, sig4]);
+
 
 
     </script>

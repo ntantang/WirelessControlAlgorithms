@@ -98,12 +98,6 @@
 </div>
 
 <div class="content-section" id="slider_2_parent" style="margin-left: 1%;">
-    <!--    <p>-->
-    <!--        <label for="frequency2">Frequency</label>-->
-    <!--        <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="frequency2" step="0.001"-->
-    <!--               oninput="update_display2(parseFloat(value))">-->
-    <!--        <output for="frequency2" id="fc2">0.1</output>-->
-    <!--    </p>-->
     <p>
         <label for="pathloss2">Underwater Path Loss = </label>
         <output for="pathloss2" id="pl2"></output>
@@ -230,14 +224,6 @@
     var xInvScale2 = d3.scaleLinear().range([-xrange, xrange]).domain([0, width]);
     var yInvScale2 = d3.scaleLinear().range([-yrange, yrange]).domain([height, 0]);
 
-    // determine time and frequency scale/units
-    // var [scale_freq2, units_freq2] = scale_units(f0+fs/2,0.1); // freq scale
-    // var fScale2 = d3.scaleLinear().domain([(f0-0.5*fs)*scale_freq2, (f0+0.5*fs)*scale_freq2]).range([0, width]);
-    // var pScale2 = d3.scaleLinear().domain([-110, 10]).range([height, 0]);
-
-
-
-
     // d3's line generator
     var linef2 = d3.line()
         .x(function(d, i) { return fScale((f0+(i/nfft-0.5)*fs)*scale_freq); })  // map frequency
@@ -257,7 +243,6 @@
         var mu = 1e-6;
         var omega = 1;
 
-        // x - jy
         var x = mu * ep;
         var y = (omega * mu) / w;
         var insideSQRT = math.complex(x, -y);
@@ -266,7 +251,6 @@
         var outsideSQRT = math.complex(w, 1);
         var res_complex = math.multiply(outsideSQRT, SQRT);
 
-        //console.log(res_complex.re);
         return res_complex.re;
     }
 
@@ -277,15 +261,12 @@
         var mu = 1e-6;
         var sigma = 1;
 
-        // x - jy
         var x = mu * w;
         var complex_x = math.complex(0,x);
-        // console.log("x");
-        // console.log(complex_x.re);
+
         var y = (ep * w);
         var complex_y = math.complex(0,y);
-        // console.log("y");
-        // console.log(complex_y.re);
+
         var complex_sigma = math.complex(sigma, 0);
 
         var insideSQRT = math.add(complex_sigma, complex_y);
@@ -293,17 +274,14 @@
 
         var SQRT = math.sqrt(math.divide(complex_x, insideSQRT));
 
-        //console.log(res_complex.re);
+
         return SQRT.re;
     }
 
-    // fc = 100
     var realpart = impedance(100);
-    // console.log(realpart)
 
     impedance(fc);
 
-    // run initial update
 
     function updateDisplays(freq) {
         if (freq!=null) { fc = freq; }
@@ -380,14 +358,6 @@
         let L = L1+L2;
         let g  = 16-L;
         const bw = 0.1;
-
-        /*let Ln = 20*Math.log10(4*Math.PI*d*fc/lambda);
-        let Lw = 20*Math.log10((lambda/fc)/(2*Math.PI/beta));
-        let Latt = 10*Math.log10(Math.exp(-2*alpha*d));
-        let L = Math.pow(10.,(Ln + Lw + Latt)/10.);
-        let g  = 16-L;
-        const bw = 0.1;*/
-
 
         // update generator
         generator2.clear();

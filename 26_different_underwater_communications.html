@@ -100,7 +100,7 @@
 
     <head>
         <div class="center">
-            <p><br /> <br />Simulation:</p>
+            <p><br /> <br /> <br /> Simulation:</p>
         </div>
     </head>
     <body>
@@ -138,63 +138,30 @@
             than acoustic communication, however, the range is limited.
             This type of communication however, can be used to recover data wirelessly from sensors that are underwater.
         </p>
-</body>
+    </body>
 
     <div class="content-section" id="slider_1_parent" style="margin-left: 10%; margin-top: 6%;">
         <p>
             <label for="frequency">Frequency</label>
             <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="frequency" step="0.001"
-                   oninput="update_display(parseFloat(value))">
+                   oninput="updateDisplays(parseFloat(value))">
             <output for="frequency" id="fc">0.1</output>
         </p>
         <p>
-            <label for="wavelength">Wavelength</label>
-            <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="wavelength" step="0.001"
-                   oninput="update_display(parseFloat(value))">
-            <output for="wavelength" id="wl">0.1</output>
+            <label for="wavelength">Wavelength = </label>
+            <output for="wavelength" id="wl"></output>
         </p>
         <p>
-            <label for="distance">Distance</label>
-            <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="distance" step="0.001"
-                   oninput="update_display(parseFloat(value))">
-            <output for="distance" id="ds">0.1</output>
+            <label for="distance">Distance = </label>
+            <output for="distance" id="ds"></output>
         </p>
         <p>
-            <label for="pathloss">Path Loss</label>
-            <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="pathloss" step="0.001"
-                   oninput="update_display(parseFloat(value))">
-            <output for="pathloss" id="pl">0.1</output>
+            <label for="pathloss">Terrestrial Path Loss = </label>
+            <output for="pathloss" id="pl"></output>
         </p>
     </div>
 
 
-
-    <div class="content-section" id="slider_2_parent" style="margin-left: 10%; margin-top:6%;">
-        <p>
-            <label for="frequency2">Frequency</label>
-            <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="frequency2" step="0.001"
-                   oninput="update_display(parseFloat(value))">
-            <output for="frequency2" id="fc">0.1</output>
-        </p>
-        <p>
-            <label for="wavelengt2h">Wavelength</label>
-            <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="wavelength2" step="0.001"
-                   oninput="update_display(parseFloat(value))">
-            <output for="wavelength2" id="wl">0.1</output>
-        </p>
-        <p>
-            <label for="distance2">Distance</label>
-            <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="distance2" step="0.001"
-                   oninput="update_display(parseFloat(value))">
-            <output for="distance2" id="ds">0.1</output>
-        </p>
-        <p>
-            <label for="pathloss2">Path Loss</label>
-            <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="pathloss2" step="0.001"
-                   oninput="update_display(parseFloat(value))">
-            <output for="pathloss2" id="pl">0.1</output>
-        </p>
-    </div>
 
 
 
@@ -202,58 +169,287 @@
     <script src="d3.v5.min.js"></script>
     <script src="fft.js"></script>
     <script src="support.js"></script>
-
-
     <script>
 
 
-        var sig1 = Signal(JSON.parse(JSON.stringify(conf.signal_multi)), '', {
-            bw_max: 38.0e6, // Hz
-            bw_min: 4.0e6,  // Hz
-            bw_init: 4.0e6, // Hz
-            gn_init: -10, // dB
-            gn_min: -40, // dB
-            mcs_init: 6, // array index int
-            freq_init: 1785.0e6
-        });
 
-        var sig2 = Signal(JSON.parse(JSON.stringify(conf.signal_multi)), '', {
-            bw_max: 38.0e6, // Hz
-            bw_min: 4.0e6,  // Hz
-            bw_init: 4.0e6, // Hz
-            gn_init: -10, // dB
-            gn_min: -40, // dB
-            mcs_init: 6, // array index int
-            freq_init: 1795.0e6
-        });
+        // 2. Use the margin convention practice
+        var margin = { top: 10, right: 50, bottom: 50, left: 50 }
+            , width = 720 - margin.left - margin.right  // Use the window's width
+            , height = 320 - margin.top - margin.bottom; // Use the window's height
 
-        var sig3 = Signal(JSON.parse(JSON.stringify(conf.signal_multi)), '', {
-            bw_max: 38.0e6, // Hz
-            bw_min: 4.0e6,  // Hz
-            bw_init: 4.0e6, // Hz
-            gn_init: -10, // dB
-            gn_min: -40, // dB
-            mcs_init: 6, // array index int
-            freq_init: 1805.0e6
-        });
+        // options
+        var fs = 3000e6, f0 = 1500e6;    // sample rate, center frequency
+        var fc = 0.0;
+        var xrange = 1200, yrange = 200; // range in meters
+        var xmax = 1150, ymax = 180; // maximum values
+        var nfft = 2048, generator = new siggen(nfft);
+        generator.m = 120;  // set filter semi-length
+        generator.beta = 4;
 
-        var sig4 = Signal(JSON.parse(JSON.stringify(conf.signal_multi)), '', {
-            bw_max: 38.0e6, // Hz
-            bw_min: 4.0e6,  // Hz
-            bw_init: 4.0e6, // Hz
-            gn_init: -10, // dB
-            gn_min: -40, // dB
-            mcs_init: 6, // array index int
-            freq_init: 1815.0e6
-        });
+        // scale
+        var xScale = d3.scaleLinear().domain([-xrange, xrange]).range([0, width]);
+        var yScale = d3.scaleLinear().domain([-yrange, yrange]).range([height, 0]);
+
+        // inverted scale
+        var xInvScale = d3.scaleLinear().range([-xrange, xrange]).domain([0, width]);
+        var yInvScale = d3.scaleLinear().range([-yrange, yrange]).domain([height, 0]);
+
+        // determine time and frequency scale/units
+        var [scale_freq, units_freq] = scale_units(f0 + fs / 2, 0.1); // freq scale
+        var fScale = d3.scaleLinear().domain([(f0 - 0.5 * fs) * scale_freq, (f0 + 0.5 * fs) * scale_freq]).range([0, width]);
+        var pScale = d3.scaleLinear().domain([-110, 60]).range([height, 0]);
+
+        // create SVG objects (map and frequency plot)
+        var svgm = svg_create(margin, width, height, xScale, yScale);
+        var svgf = svg_create(margin, width, height, fScale, pScale);
+
+        // add labels
+        svg_add_labels(svgm, margin, width, height, "Horizonal Position (m)", "Vertical Position (m)");
+        svg_add_labels(svgf, margin, width, height, "Frequency (" + units_freq + "Hz)", "Power Spectral Density (dB)");
+
+        // clip paths
+        svgf.append("clipPath").attr("id", "clipf").append("rect").attr("width", width).attr("height", height);
+
+        // add pointer definition
+        var pointer = svgm.append("defs").append("g")
+            .attr("id", "pointer")
+            .attr("transform", "scale(0.8)");
+        pointer.append("path").attr("d", "M0-1c-14.5-25.6-14.5-25.7-14.5-33.8c0-8.1,6.5-14.6,14.5-14.6s14.5,6.6,14.5,14.6C14.5-26.7,14.5-26.6,0-1z");
+        pointer.append("path").attr("d", "M0-49c7.7,0,14,6.3,14,14.1c0,8,0,8.1-14,32.8c-14-24.7-14-24.9-14-32.8C-14-42.7-7.7-49,0-49 M0-50c-8.3,0-15,6.8-15,15.1 S-15-26.5,0,0c15-26.5,15-26.5,15-34.9S8.3-50,0-50L0-50z");
+
+        // create markers with default positions
+        var markers = [
+            { x: xScale(-xmax), y: yScale(ymax), c: "#039be5", b: "#004080" },
+            { x: xScale(0), y: yScale(0), c: "#03e539", b: "#008040" },];
+        // spectrum data
+        var dataf = d3.range(0, nfft - 1).map(function (f) { return { "y": 0 } })
+
+        // d3's line generator
+        var line = d3.line()
+            .x(function (d) { return d.x; })
+            .y(function (d) { return d.y; });
+        var linef = d3.line()
+            .x(function (d, i) { return fScale((f0 + (i / nfft - 0.5) * fs) * scale_freq); })  // map frequency
+            .y(function (d) { return pScale(d.y); }); // map PSD
+
+        // Append the path, bind the data, and call the line generator
+        var path = svgm.append("path")
+            .datum(markers)
+            .attr("class", "stroke-light no-fill dashed stroke-gray-0")
+            .attr("d", line);
+        var pathf = svgf.append("path")
+            .attr("clip-path", "url(#clipf)")
+            .datum(dataf)
+            .attr("class", "stroke-med no-fill stroke-green-o")
+            .attr("d", linef);
+
+        // add markers with associated data
+        svgm.selectAll("use")
+            .data(markers)
+            .enter()
+            .append("use")
+            .attr("href", "#pointer")
+            .attr("x", function (d) { return (d.x) })
+            .attr("y", function (d) { return (d.y) })
+            .attr("fill", function (d) { return (d.c) })
+            .attr("stroke", function (d) { return (d.b) })
+            .attr("class", "pin");
+
+        var dragHandler = d3.drag()
+            .on("drag", function (d) {
+                d3.select(this)
+                    .attr("x", d.x = Math.max(Math.min(d3.event.x, xScale(xmax)), xScale(-xmax)))
+                    .attr("y", d.y = Math.min(Math.max(d3.event.y, yScale(ymax)), yScale(-ymax))); // min/max flipped for y-axis
+                updateDisplays();
+            });
+
+        dragHandler(svgm.selectAll("use"));
 
 
-        ThroughputPlot([sig1, sig2, sig3, sig4]);
 
+        //Creating a map
+        var xmax2 = 1150, ymax2 = 180; // maximum values
+        var generator2 = new siggen(nfft);
+        generator2.m = 120;  // set filter semi-length
+        generator2.beta = 4;
+
+        // scale
+        var xScale2 = d3.scaleLinear().domain([-xrange, xrange]).range([0, width]);
+        var yScale2 = d3.scaleLinear().domain([-yrange, yrange]).range([height, 0]);
+
+        // inverted scale
+        var xInvScale2 = d3.scaleLinear().range([-xrange, xrange]).domain([0, width]);
+        var yInvScale2 = d3.scaleLinear().range([-yrange, yrange]).domain([height, 0]);
+
+        // d3's line generator
+        var line2 = d3.line()
+            .x(function (d) { return d.x; })
+            .y(function (d) { return d.y; });
+        var linef2 = d3.line()
+            .x(function (d, i) { return fScale((f0 + (i / nfft - 0.5) * fs) * scale_freq); })  // map frequency
+            .y(function (d) { return pScale(d.y); }); // map PSD
+
+        // Append the path, bind the data, and call the line generator
+        var path2 = svgm.append("path")
+            .datum(markers)
+            .attr("class", "stroke-light no-fill dashed stroke-gray-0")
+            .attr("d", line2);
+        var pathf2 = svgf.append("path")
+            .attr("clip-path", "url(#clipf)")
+            .datum(dataf)
+            .attr("class", "stroke-med no-fill stroke-red")
+            .attr("d", linef2);
+
+     
+        function gamma(fc)
+        {
+            var j = math.i; // i
+            var w = 2 * Math.PI * fc;
+            var ep = 80;
+            var mu = 1e-6;
+            var omega = 1;
+
+            // x - jy
+            var x = mu * ep;
+            var y = (omega * mu) / w;
+            var insideSQRT = math.complex(x, -y);
+
+            var SQRT = math.sqrt(insideSQRT);
+            var outsideSQRT = math.complex(w, 1);
+            var res_complex = math.multiply(outsideSQRT, SQRT);
+
+            //console.log(res_complex.re);
+            return res_complex.re;
+        }
+
+        function impedance(fc) {
+            var j = math.i; // i
+            var w = 2 * Math.PI * fc;
+            var ep = 80;
+            var mu = 1e-6;
+            var sigma = 1;
+
+            // x - jy
+            var x = mu * w;
+            var complex_x = math.complex(0, x);
+            console.log("x");
+            console.log(complex_x.re);
+            var y = (ep * w);
+            var complex_y = math.complex(0, y);
+            console.log("y");
+            console.log(complex_y.re);
+            var complex_sigma = math.complex(sigma, 0);
+
+            var insideSQRT = math.add(complex_sigma, complex_y);
+
+
+            var SQRT = math.sqrt(math.divide(complex_x, insideSQRT));
+
+            //console.log(res_complex.re);
+            return SQRT.re;
+        }
+
+        // fc = 100
+        var realpart = impedance(100);
+        console.log(realpart)
+
+        impedance(fc);
+
+        // run initial update
+
+        function updateDisplays(freq) {
+            if (freq != null) { fc = freq; }
+            let lambda = 299.792458e6 / (fc * fs + f0);
+            let dx = xInvScale(markers[0].x) - xInvScale(markers[1].x);
+            let dy = yInvScale(markers[0].y) - yInvScale(markers[1].y);
+            let d = Math.max(1, Math.sqrt(dx ** 2 + dy ** 2));
+
+            document.querySelector('#fc').value = d3.format(".2f")((f0 + fc * fs) * scale_freq) + " " + units_freq + "Hz";
+            document.querySelector('#frequency').value = fc;
+
+            update_display(freq);
+            update_display2(freq);
+
+            document.querySelector('#wl').value = d3.format(".2f")(lambda * 1e2) + " cm";
+            document.querySelector('#ds').value = d3.format(".3f")(d) + " m";
+        }
+
+
+        function update_display(freq) {
+
+            // compute wavelength in meters
+            let lambda = 299.792458e6 / (fc * fs + f0);
+
+            // compute distance and appropriate path loss
+            let dx = xInvScale(markers[0].x) - xInvScale(markers[1].x);
+            let dy = yInvScale(markers[0].y) - yInvScale(markers[1].y);
+            let d = Math.max(1, Math.sqrt(dx ** 2 + dy ** 2));
+            let L = 20 * Math.log10(4 * Math.PI * d / lambda);
+            let g = 16 - L;
+            const bw = 0.1;
+
+            // update generator
+            generator.clear();
+            generator.add_signal(fc, bw, g); // user signal
+
+            //generator.add_tone(fc,g);
+            generator.generate(-100);
+            dataf = d3.range(0, nfft - 1).map(function (i) { return { "y": generator.psd[i] } })
+            pathf.datum(dataf).attr("d", linef);
+
+            // draw line between markers
+            path.datum(markers).attr("d", line);
+
+            // update output numbers
+
+            document.querySelector('#pl').value = d3.format(".3f")(L) + " dB";
+        }
+
+        function update_display2(freq) {
+
+            // compute wavelength in meters
+            let lambda = 299.792458e6 / (fc * fs + f0);
+            let w = 2 * Math.PI * fc;
+            let mu = 1e-6;
+            let ep = 80.4;
+            let ep_ = 1.525;
+            let omega = 1;
+
+            let alpha = gamma(fc);
+            let im = impedance(fc);
+            let impedance_n = 377;
+
+            let beta = w * Math.sqrt((mu * ep / 2) * (Math.sqrt(1 + Math.pow((ep_ / ep), 2) + 1)));
+
+            // compute distance and appropriate path loss
+            let dx = xInvScale(markers[0].x) - xInvScale(markers[1].x);
+            let dy = yInvScale(markers[0].y) - yInvScale(markers[1].y);
+            let d = Math.max(1, Math.sqrt(dx ** 2 + dy ** 2));
+            let L1 = alpha * (20 / Math.log(10)) * d;
+            let L2 = 10 * Math.log10(Math.abs(im) ** 2 * (impedance_n / im));
+            let L = L1 + L2;
+            let g = 16 - L;
+            const bw = 0.1;
+
+            // update generator
+            generator2.clear();
+            generator2.add_signal(fc, bw, g); // user signal
+
+            //generator.add_tone(fc,g);
+            generator2.generate(-100);
+            dataf = d3.range(0, nfft - 1).map(function (i) { return { "y": generator2.psd[i] } })
+            pathf2.datum(dataf).attr("d", linef2);
+
+            // draw line between markers
+            path2.datum(markers).attr("d", line2);
+
+            // update output numbers
+            document.querySelector('#pl2').value = d3.format(".3f")(L) + " dB";
+        }
 
 
     </script>
-
 </html>
 
 

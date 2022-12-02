@@ -1,218 +1,426 @@
 ﻿<!DOCTYPE html>
 <html lang="en-US" style="display: flex;">
 <head>
-  <title>HLSI Ex 25</title>
-  <meta charset="UTF-8"/>
-  <link rel="stylesheet" type="text/css" media="all" href="hlsi.css">
-  <link rel=stylesheet type=text/css href=sidebar.css />
-  <script src=d3.v5.min.js></script>
-  <script src=fft.js></script>
-  <script src=common.js></script>
-  <script src=signal.js></script>
-  <script src=sliders.js></script>
-  <script src=powerSpectrumPlot.js></script>
-  <script src=iqPlot.js></script>
+    <title>HLSI Ex 25</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" media="all" href="hlsi.css">
+    <link rel=stylesheet type=text/css href=sidebar.css />
+    <script src=d3.v5.min.js></script>
+    <script src=fft.js></script>
+    <script src=common.js></script>
+    <script src=signal.js></script>
+    <script src=sliders.js></script>
+    <script src=powerSpectrumPlot.js></script>
+    <script src=iqPlot.js></script>
+    <script src="https://unpkg.com/mathjs/lib/browser/math.js"></script>
 </head>
 
 
 <body style="margin:0;">
-<section class="banner" style="position: fixed; z-index: 11; background: rgba(0,0,0,0.85)">
-  <label for="menu-control" class="hamburger">
-    <i class="hamburger__icon"></i>
-    <i class="hamburger__icon"></i>
-    <i class="hamburger__icon"></i>
-  </label>
+    <section class="banner" style="position: fixed; z-index: 11; background: rgba(0,0,0,0.85)">
+        <label for="menu-control" class="hamburger">
+            <i class="hamburger__icon"></i>
+            <i class="hamburger__icon"></i>
+            <i class="hamburger__icon"></i>
+        </label>
 
-  <input type="checkbox" id="menu-control" class="menu-control">
+        <input type="checkbox" id="menu-control" class="menu-control">
 
-  <aside class="sidebar" style="z-index: 10;">
+        <aside class="sidebar" style="z-index: 10;">
 
-      <nav class="sidebar__menu">
-          <a href="01_bw.html"><b>1</b> Bandwidth</a>
-          <a href="02_freq.html"><b>2</b> Frequency</a>
-          <a href="03_gn.html"><b>3</b> Gain</a>
-          <a href="04_freq_bw_gn.html"><b>4</b> Frequency, Bandwidth, and Gain</a>
-          <a href="05_capacity.html"><b>5</b> Information Capacity</a>
-          <a href="06_interference.html"><b>6</b> Interference and Information Capacity</a>
-          <a href="07_capacity.html"><b>7</b> Information Capacity</a>
-          <a href="08_capacity.html"><b>8</b> Information Capacity</a>
-          <a href="09_capacity.html"><b>9</b> Information Capacity</a>
-          <a href="10_capacity.html"><b>10</b> Information Capacity</a>
-          <a href="11_pathloss.html" class="selected"><b>11</b> Path Loss</a>
-          <a href="12_pathloss_interference.html"><b>12</b> Path Loss with Interference</a>
-          <a href="13_manual_avoidance.html"><b>13</b> Manual Interferer Avoidance</a>
-          <a href="" onclick="alert('Exercise 14: reserved for future use')"><b>14</b> SAS (Spectrum Access System)</a>
-          <a href="15_rule_based_avoidance.html"><b>15</b> Rule Based Interferer Avoidance</a>
-          <a href="16_programmable_avoidance.html"><b>16</b> Programmable Interferer Avoidance</a>
-          <a href="17_machine_learning_avoidance.html"><b>17</b> Machine Learning Interferer Avoidance</a>
-          <a href="18_machine_learning_time_based_avoidance.html"><b>18</b> Machine Learning With Periodic Interferer Avoidance</a>
-          <a href="19_rf_front_end_spectrum_sharing.html"><b>19</b> RF Front End Spectrum Sharing</a>
-          <a href="20_rf_front_end_spectrum_sharing.html"><b>20</b> Programmable RF Front End Spectrum Sharing</a>
-          <a href="21_rf_front_end_spectrum_sharing_with_interferer.html"><b>21</b> RF Front End Spectrum Sharing with Interferer</a>
-          <a href="22_rf_front_end_spectrum_sharing_with_interferer.html"><b>22</b> Programmable Spectrum Sharing with Interferer</a>
-          <a href="23_rf_front_end_spectrum_sharing_sliders_programmable.html"><b>23</b> RFFE Spectrum Sharing - Manual and Programmable</a>
-          <a href="24_pathloss.html"><b>24</b> Pathloss</a>
-          <a href="25_underwater_communications_introduction.html"><b>25</b></a> Introduction to Underwater Communications</a>
-          <a href="26_different_underwater_communications.html"><b>26</b> Different Underwater Communications</a>
-          <a href="27_acoustic_link_capacities.html"><b>27</b> Acoustic Link Capacities</a>
-          <a href="28_transmitter_receiver_acoustic_capabilities_with_jammer.html"><b>28</b> Transmitter Receiver Acoustic Capabilities with Jammer</a>
-          <a href="29_maximize_acoustic_capacitance_jammer.html"><b>29</b> Maximize Acoustic Capacitance Jammer</a>
-      </nav>
+            <nav class="sidebar__menu">
+                <a href="01_bw.html"><b>1</b> Bandwidth</a>
+                <a href="02_freq.html"><b>2</b> Frequency</a>
+                <a href="03_gn.html"><b>3</b> Gain</a>
+                <a href="04_freq_bw_gn.html"><b>4</b> Frequency, Bandwidth, and Gain</a>
+                <a href="05_capacity.html"><b>5</b> Information Capacity</a>
+                <a href="06_interference.html"><b>6</b> Interference and Information Capacity</a>
+                <a href="07_capacity.html"><b>7</b> Information Capacity</a>
+                <a href="08_capacity.html"><b>8</b> Information Capacity</a>
+                <a href="09_capacity.html"><b>9</b> Information Capacity</a>
+                <a href="10_capacity.html"><b>10</b> Information Capacity</a>
+                <a href="11_pathloss.html" class="selected"><b>11</b> Path Loss</a>
+                <a href="12_pathloss_interference.html"><b>12</b> Path Loss with Interference</a>
+                <a href="13_manual_avoidance.html"><b>13</b> Manual Interferer Avoidance</a>
+                <a href="" onclick="alert('Exercise 14: reserved for future use')"><b>14</b> SAS (Spectrum Access System)</a>
+                <a href="15_rule_based_avoidance.html"><b>15</b> Rule Based Interferer Avoidance</a>
+                <a href="16_programmable_avoidance.html"><b>16</b> Programmable Interferer Avoidance</a>
+                <a href="17_machine_learning_avoidance.html"><b>17</b> Machine Learning Interferer Avoidance</a>
+                <a href="18_machine_learning_time_based_avoidance.html"><b>18</b> Machine Learning With Periodic Interferer Avoidance</a>
+                <a href="19_rf_front_end_spectrum_sharing.html"><b>19</b> RF Front End Spectrum Sharing</a>
+                <a href="20_rf_front_end_spectrum_sharing.html"><b>20</b> Programmable RF Front End Spectrum Sharing</a>
+                <a href="21_rf_front_end_spectrum_sharing_with_interferer.html"><b>21</b> RF Front End Spectrum Sharing with Interferer</a>
+                <a href="22_rf_front_end_spectrum_sharing_with_interferer.html"><b>22</b> Programmable Spectrum Sharing with Interferer</a>
+                <a href="23_rf_front_end_spectrum_sharing_sliders_programmable.html"><b>23</b> RFFE Spectrum Sharing - Manual and Programmable</a>
+                <a href="24_pathloss.html"><b>24</b> Pathloss</a>
+                <a href="25_underwater_communications_introduction.html"><b>25</b></a> Introduction to Underwater Communications</a>
+                <a href="26_different_underwater_communications.html"><b>26</b> Different Underwater Communications</a>
+                <a href="27_acoustic_link_capacities.html"><b>27</b> Acoustic Link Capacities</a>
+                <a href="28_transmitter_receiver_acoustic_capabilities_with_jammer.html"><b>28</b> Transmitter Receiver Acoustic Capabilities with Jammer</a>
+                <a href="29_maximize_acoustic_capacitance_jammer.html"><b>29</b> Maximize Acoustic Capacitance Jammer</a>
+            </nav>
 
-      <label for="menu-control" class="sidebar__close"></label>
-
-
-  </aside>
-
-  <div style="margin-left: 6%; font-size: 1.3rem; margin-top: 0.3%; font-family: sans-serif; order: 1; width: inherit;"><span style="color: #ddd;">Exercise 25</span> Introduction to Underwater Communications</div>
-  <div style="order: 2; margin-left: auto; margin-right: 2%; display: flex;">
-    <span style="font-size: 250%; font-family: monospace; letter-spacing: 2px; margin-left: auto; margin-right: 5px; color: #e6d9ba;"></span>
-    <div style="width: 20%;">
-      <img style="width: 100%;" src="images/wireless-logo.png">
-    </div>
-  </div>
-</section>
-
-<div class="content-section" style="margin: 0% 2%; margin-top: 8%;">
-  <p id=scriptController style="margin-bottom: 2%;"></p>
-
-  <p id=capacityBanner style="display: none;">
-  </p>
-
-  <div style="display: inline-flex; width: 100%;">
-    <div style="width: 25%;">
-      <div style="font-size: 110%; color: #ff6b6b">Radio Frequency (RF)</div>
-      <p>
-        <input type="range" id=freq1 />
-      </p>
-      <p>
-        <input type="range" id=bw1 />
-      </p>
-      <p>
-        <input type="range" id=gn1 />
-      </p>
-      <p>
-        <input type="range" id=mcs1 />
-      </p>
-    </div>
-
-    <div style="width: 25%;">
-      <div style="font-size: 110%; color: #b5ebff">Acoustic</div>
-      <p>
-        <input type="range" id=freq2 />
-      </p>
-      <p>
-        <input type="range" id=bw2 />
-      </p>
-      <p>
-        <input type="range" id=gn2 />
-      </p>
-      <p>
-        <input type="range" id=mcs2 />
-      </p>
-    </div>
-  </div>
+            <label for="menu-control" class="sidebar__close"></label>
 
 
-  <div style="display:inline-flex;">
-    <span style="font-size: 24px; margin-right: 8px;">3D</span>
-    <label class="switch">
-      <input id="psd_3d_checkbox" type="checkbox" onclick="power_spectral_density_3d_checkbox_change();">
-      <span class="slider round"></span>
-    </label>
-  </div>
-  <div style="width: 30%; display:inline-flex; margin-left:1%;">
-    <div style="display: inline-flex;">
-      <div style="width: 28px; height: 15px; background:rgba(163,36,36,255)"></div>
-      <div style="margin-left: 5px; overflow: hidden; white-space: nowrap;">Radio Frequency (RF)</div>
+        </aside>
+        </aside>
+
+        <div style="margin-left: 6%; font-size: 1.3rem; margin-top: 0.3%; font-family: sans-serif; order: 1; width: inherit;"><span style="color: #ddd;">Exercise 25</span> Introduction to Underwater Communications</div>
+        <div style="order: 2; margin-left: auto; margin-right: 2%; display: flex;">
+            <span style="font-size: 250%; font-family: monospace; letter-spacing: 2px; margin-left: auto; margin-right: 5px; color: #e6d9ba;"></span>
+            <div style="width: 20%;">
+                <img style="width: 100%;" src="images/wireless-logo.png">
+            </div>
+        </div>
+    </section>
+
+    <div class="content-section" id="slider_1_parent" style="margin-left: 1%; margin-top:8%;">
+        <p>
+            <label for="frequency">Frequency</label>
+            <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="frequency" step="0.001"
+                   oninput="updateDisplays(parseFloat(value))">
+            <output for="frequency" id="fc">0.1</output>
+        </p>
+        <p>
+            <label for="wavelength">Wavelength = </label>
+            <output for="wavelength" id="wl"></output>
+        </p>
+        <p>
+            <label for="distance">Distance = </label>
+            <output for="distance" id="ds"></output>
+        </p>
+        <p>
+            <label for="pathloss">Terrestrial Path Loss = </label>
+            <output for="pathloss" id="pl"></output>
+        </p>
     </div>
 
-    <div style="display: inline-flex; margin-left: 10px;">
-      <div style="width: 28px; height: 15px; background:rgba(0,176,240,255);"></div>
-      <div style="margin-left: 5px; overflow: hidden; white-space: nowrap;">Acoustic</div>
+    <div class="content-section" id="slider_2_parent" style="margin-left: 1%;">
+        <!--    <p>-->
+        <!--        <label for="frequency2">Frequency</label>-->
+        <!--        <input class="width-4" type="range" min="-0.4" max="0.4" value="0.0" id="frequency2" step="0.001"-->
+        <!--               oninput="update_display2(parseFloat(value))">-->
+        <!--        <output for="frequency2" id="fc2">0.1</output>-->
+        <!--    </p>-->
+        <p>
+            <label for="pathloss2">Underwater Path Loss = </label>
+            <output for="pathloss2" id="pl2"></output>
+        </p>
     </div>
-
-  </div>
-</div>
-
-<div id="psd_svg_figure_parent" style="float: left; margin-left: 1%;"></div>
-
-<div style="width: 720px; height: 320px; display: inline-block;">
-  <canvas id="spectral-efficiency-bar-chart" style="width: 100%; height: 100%; margin-top:-25px;"></canvas>
-</div>
-
 
 </body>
+
+<!-- Load in the javascript libraries -->
+<script src="d3.v5.min.js"></script>
+<script src="fft.js"></script>
+<script src="support.js"></script>
 <script>
-  'use strict';
+
+    // 2. Use the margin convention practice
+    var margin = { top: 10, right: 50, bottom: 50, left: 50 }
+        , width = 720 - margin.left - margin.right  // Use the window's width
+        , height = 320 - margin.top - margin.bottom; // Use the window's height
+
+    // options
+    var fs = 3000e6, f0 = 1500e6;    // sample rate, center frequency
+    var fc = 0.0;
+    var xrange = 1200, yrange = 200; // range in meters
+    var xmax = 1150, ymax = 180; // maximum values
+    var nfft = 2048, generator = new siggen(nfft);
+    generator.m = 120;  // set filter semi-length
+    generator.beta = 4;
+
+    // scale
+    var xScale = d3.scaleLinear().domain([-xrange, xrange]).range([0, width]);
+    var yScale = d3.scaleLinear().domain([-yrange, yrange]).range([height, 0]);
+
+    // inverted scale
+    var xInvScale = d3.scaleLinear().range([-xrange, xrange]).domain([0, width]);
+    var yInvScale = d3.scaleLinear().range([-yrange, yrange]).domain([height, 0]);
+
+    // determine time and frequency scale/units
+    var [scale_freq, units_freq] = scale_units(f0 + fs / 2, 0.1); // freq scale
+    var fScale = d3.scaleLinear().domain([(f0 - 0.5 * fs) * scale_freq, (f0 + 0.5 * fs) * scale_freq]).range([0, width]);
+    var pScale = d3.scaleLinear().domain([-110, 60]).range([height, 0]);
+
+    // create SVG objects (map and frequency plot)
+    var svgm = svg_create(margin, width, height, xScale, yScale);
+    var svgf = svg_create(margin, width, height, fScale, pScale);
+
+    // add labels
+    svg_add_labels(svgm, margin, width, height, "Horizonal Position (m)", "Vertical Position (m)");
+    svg_add_labels(svgf, margin, width, height, "Frequency (" + units_freq + "Hz)", "Power Spectral Density (dB)");
+
+    // clip paths
+    svgf.append("clipPath").attr("id", "clipf").append("rect").attr("width", width).attr("height", height);
+
+    // add pointer definition
+    var pointer = svgm.append("defs").append("g")
+        .attr("id", "pointer")
+        .attr("transform", "scale(0.8)");
+    pointer.append("path").attr("d", "M0-1c-14.5-25.6-14.5-25.7-14.5-33.8c0-8.1,6.5-14.6,14.5-14.6s14.5,6.6,14.5,14.6C14.5-26.7,14.5-26.6,0-1z");
+    pointer.append("path").attr("d", "M0-49c7.7,0,14,6.3,14,14.1c0,8,0,8.1-14,32.8c-14-24.7-14-24.9-14-32.8C-14-42.7-7.7-49,0-49 M0-50c-8.3,0-15,6.8-15,15.1 S-15-26.5,0,0c15-26.5,15-26.5,15-34.9S8.3-50,0-50L0-50z");
+
+    // create markers with default positions
+    var markers = [
+        { x: xScale(-xmax), y: yScale(ymax), c: "#039be5", b: "#004080" },
+        { x: xScale(0), y: yScale(0), c: "#03e539", b: "#008040" },];
+    // spectrum data
+    var dataf = d3.range(0, nfft - 1).map(function (f) { return { "y": 0 } })
+
+    // d3's line generator
+    var line = d3.line()
+        .x(function (d) { return d.x; })
+        .y(function (d) { return d.y; });
+    var linef = d3.line()
+        .x(function (d, i) { return fScale((f0 + (i / nfft - 0.5) * fs) * scale_freq); })  // map frequency
+        .y(function (d) { return pScale(d.y); }); // map PSD
+
+    // Append the path, bind the data, and call the line generator
+    var path = svgm.append("path")
+        .datum(markers)
+        .attr("class", "stroke-light no-fill dashed stroke-gray-0")
+        .attr("d", line);
+    var pathf = svgf.append("path")
+        .attr("clip-path", "url(#clipf)")
+        .datum(dataf)
+        .attr("class", "stroke-med no-fill stroke-green-o")
+        .attr("d", linef);
+
+    // add markers with associated data
+    svgm.selectAll("use")
+        .data(markers)
+        .enter()
+        .append("use")
+        .attr("href", "#pointer")
+        .attr("x", function (d) { return (d.x) })
+        .attr("y", function (d) { return (d.y) })
+        .attr("fill", function (d) { return (d.c) })
+        .attr("stroke", function (d) { return (d.b) })
+        .attr("class", "pin");
+
+    var dragHandler = d3.drag()
+        .on("drag", function (d) {
+            d3.select(this)
+                .attr("x", d.x = Math.max(Math.min(d3.event.x, xScale(xmax)), xScale(-xmax)))
+                .attr("y", d.y = Math.min(Math.max(d3.event.y, yScale(ymax)), yScale(-ymax))); // min/max flipped for y-axis
+            updateDisplays();
+        });
+
+    dragHandler(svgm.selectAll("use"));
 
 
-  // This sig contains all the constant parameters associated with the
-  // signal and also the 4 changing parameters (independent variables)
-  // sig.freq, sig.gn, sig.bw, and sig.mcs (center frequency, gain,
-  // bandwidth, and modulation scheme index), in addition to dependent
-  // variables sig.rate and sig.sinr.
-  //
 
-  Slider(sig1, 'freq', '#freq1');
-  Slider(sig1, 'bw', '#bw1');
-  Slider(sig1, 'gn', '#gn1');
-  Slider(sig1, 'mcs', '#mcs1');
+    // Map 2 start
+    // options
+    // var fs2=3000e6, f02=1500e6;    // sample rate, center frequency
+    // var xrange2=1200, yrange2=200; // range in meters
+    var xmax2 = 1150, ymax2 = 180; // maximum values
+    var generator2 = new siggen(nfft);
+    generator2.m = 120;  // set filter semi-length
+    generator2.beta = 4;
 
-  Slider(sig2, 'freq', '#freq2');
-  Slider(sig2, 'bw', '#bw2');
-  Slider(sig2, 'gn', '#gn2');
-  Slider(sig2, 'mcs', '#mcs2');
+    // scale
+    var xScale2 = d3.scaleLinear().domain([-xrange, xrange]).range([0, width]);
+    var yScale2 = d3.scaleLinear().domain([-yrange, yrange]).range([height, 0]);
 
-  Slider(sig3, 'freq', '#freq3');
-  Slider(sig3, 'bw', '#bw3');
-  Slider(sig3, 'gn', '#gn3');
-  Slider(sig3, 'mcs', '#mcs3');
+    // inverted scale
+    var xInvScale2 = d3.scaleLinear().range([-xrange, xrange]).domain([0, width]);
+    var yInvScale2 = d3.scaleLinear().range([-yrange, yrange]).domain([height, 0]);
 
-  Slider(sig4, 'freq', '#freq4');
-  Slider(sig4, 'bw', '#bw4');
-  Slider(sig4, 'gn', '#gn4');
-  Slider(sig4, 'mcs', '#mcs4');
+    // determine time and frequency scale/units
+    // var [scale_freq2, units_freq2] = scale_units(f0+fs/2,0.1); // freq scale
+    // var fScale2 = d3.scaleLinear().domain([(f0-0.5*fs)*scale_freq2, (f0+0.5*fs)*scale_freq2]).range([0, width]);
+    // var pScale2 = d3.scaleLinear().domain([-110, 10]).range([height, 0]);
 
 
-  // var noise = Signal(conf.noise, "Noise", { gn_init: -40})
-
-  new ScriptController([ sig1, sig2, sig3, sig4 ], {
-    element: '#scriptController',
-    functionFiles: 'functions/ex20_functions.js'
-  });
-
-  // Slider(sig1, 'freq', '#freq1');
-  // Slider(sig1, 'bw', '#bw1');
-  // Slider(sig1, 'gn', '#gn1');
-  // Slider(sig1, 'mcs', '#mcs1');
-
-  // Slider(sig2, 'freq', '#freq2');
-  // Slider(sig2, 'bw', '#bw2');
-  // Slider(sig2, 'gn', '#gn2');
-  // Slider(sig2, 'mcs', '#mcs2');
-
-  // Slider(sig3, 'freq', '#freq3');
-  // Slider(sig3, 'bw', '#bw3');
-  // Slider(sig3, 'gn', '#gn3');
-  // Slider(sig3, 'mcs', '#mcs3');
-
-  // Slider(sig4, 'freq', '#freq4');
-  // Slider(sig4, 'bw', '#bw4');
-  // Slider(sig4, 'gn', '#gn4');
-  // Slider(sig4, 'mcs', '#mcs4');
-
-  // HoppingInterferer(interferer, '#hoppingInterferer');
-  CapacityBanner(sig1, '#capacityBanner');
-
-  PowerSpectrumPlot_2D();
-  ThroughputPlot([sig1, sig2, sig3, sig4]);
-
-  // document.body.innerHTML+= `<div style="width: 720px; height: 320px;">
-  //       <canvas id="spectral-efficiency-bar-chart" style="width: 720px"></canvas>
-  //   </div>`
 
 
-  SpectralEfficiencyPlot_BarChart.init([sig1, sig2, sig3, sig4], "spectral-efficiency-bar-chart", ["Comm Link 1", "Comm Link 2", "Comm Link 3", "Comm Link 4", "Average Total"]);
+    // d3's line generator
+    var line2 = d3.line()
+        .x(function (d) { return d.x; })
+        .y(function (d) { return d.y; });
+    var linef2 = d3.line()
+        .x(function (d, i) { return fScale((f0 + (i / nfft - 0.5) * fs) * scale_freq); })  // map frequency
+        .y(function (d) { return pScale(d.y); }); // map PSD
+
+    // Append the path, bind the data, and call the line generator
+    var path2 = svgm.append("path")
+        .datum(markers)
+        .attr("class", "stroke-light no-fill dashed stroke-gray-0")
+        .attr("d", line2);
+    var pathf2 = svgf.append("path")
+        .attr("clip-path", "url(#clipf)")
+        .datum(dataf)
+        .attr("class", "stroke-med no-fill stroke-red")
+        .attr("d", linef2);
+
+    // // add markers with associated data
+    // svgm.selectAll("use2")
+    //     .data(markers)
+    //     .enter()
+    //     .append("use2")
+    //     .attr("href","#pointer2")
+    //     .attr("x",      function(d) { return (d.x) })
+    //     .attr("y",      function(d) { return (d.y) })
+    //     .attr("fill",   function(d) { return (d.c) })
+    //     .attr("stroke", function(d) { return (d.b) })
+    //     .attr("class","pin");
+
+
+    function gamma(fc) {
+        var j = math.i; // i
+        var w = 2 * Math.PI * fc;
+        var ep = 80;
+        var mu = 1e-6;
+        var omega = 1;
+
+        // x - jy
+        var x = mu * ep;
+        var y = (omega * mu) / w;
+        var insideSQRT = math.complex(x, -y);
+
+        var SQRT = math.sqrt(insideSQRT);
+        var outsideSQRT = math.complex(w, 1);
+        var res_complex = math.multiply(outsideSQRT, SQRT);
+
+        //console.log(res_complex.re);
+        return res_complex.re;
+    }
+
+    function impedance(fc) {
+        var j = math.i; // i
+        var w = 2 * Math.PI * fc;
+        var ep = 80;
+        var mu = 1e-6;
+        var sigma = 1;
+
+        // x - jy
+        var x = mu * w;
+        var complex_x = math.complex(0, x);
+        console.log("x");
+        console.log(complex_x.re);
+        var y = (ep * w);
+        var complex_y = math.complex(0, y);
+        console.log("y");
+        console.log(complex_y.re);
+        var complex_sigma = math.complex(sigma, 0);
+
+        var insideSQRT = math.add(complex_sigma, complex_y);
+
+
+        var SQRT = math.sqrt(math.divide(complex_x, insideSQRT));
+
+        //console.log(res_complex.re);
+        return SQRT.re;
+    }
+
+    // fc = 100
+    var realpart = impedance(100);
+    console.log(realpart)
+
+    impedance(fc);
+
+    // run initial update
+
+    function updateDisplays(freq) {
+        if (freq != null) { fc = freq; }
+        let lambda = 299.792458e6 / (fc * fs + f0);
+        let dx = xInvScale(markers[0].x) - xInvScale(markers[1].x);
+        let dy = yInvScale(markers[0].y) - yInvScale(markers[1].y);
+        let d = Math.max(1, Math.sqrt(dx ** 2 + dy ** 2));
+
+        document.querySelector('#fc').value = d3.format(".2f")((f0 + fc * fs) * scale_freq) + " " + units_freq + "Hz";
+        document.querySelector('#frequency').value = fc;
+
+        update_display(freq);
+        update_display2(freq);
+
+        document.querySelector('#wl').value = d3.format(".2f")(lambda * 1e2) + " cm";
+        document.querySelector('#ds').value = d3.format(".3f")(d) + " m";
+    }
+
+
+    function update_display(freq) {
+
+        // compute wavelength in meters
+        let lambda = 299.792458e6 / (fc * fs + f0);
+
+        // compute distance and appropriate path loss
+        let dx = xInvScale(markers[0].x) - xInvScale(markers[1].x);
+        let dy = yInvScale(markers[0].y) - yInvScale(markers[1].y);
+        let d = Math.max(1, Math.sqrt(dx ** 2 + dy ** 2));
+        let L = 20 * Math.log10(4 * Math.PI * d / lambda);
+        let g = 16 - L;
+        const bw = 0.1;
+
+        // update generator
+        generator.clear();
+        generator.add_signal(fc, bw, g); // user signal
+
+        //generator.add_tone(fc,g);
+        generator.generate(-100);
+        dataf = d3.range(0, nfft - 1).map(function (i) { return { "y": generator.psd[i] } })
+        pathf.datum(dataf).attr("d", linef);
+
+        // draw line between markers
+        path.datum(markers).attr("d", line);
+
+        // update output numbers
+
+        document.querySelector('#pl').value = d3.format(".3f")(L) + " dB";
+    }
+
+    function update_display2(freq) {
+
+        // compute wavelength in meters
+        let lambda = 299.792458e6 / (fc * fs + f0);
+        let w = 2 * Math.PI * fc;
+        let mu = 1e-6;
+        let ep = 80.4;
+        let ep_ = 1.525;
+        let omega = 1;
+
+        let alpha = gamma(fc);
+        let im = impedance(fc);
+        let impedance_n = 377;
+
+        let beta = w * Math.sqrt((mu * ep / 2) * (Math.sqrt(1 + Math.pow((ep_ / ep), 2) + 1)));
+
+        // compute distance and appropriate path loss
+        let dx = xInvScale(markers[0].x) - xInvScale(markers[1].x);
+        let dy = yInvScale(markers[0].y) - yInvScale(markers[1].y);
+        let d = Math.max(1, Math.sqrt(dx ** 2 + dy ** 2));
+        let L1 = alpha * (20 / Math.log(10)) * d;
+        let L2 = 10 * Math.log10(Math.abs(im) ** 2 * (impedance_n / im));
+        let L = L1 + L2;
+        let g = 16 - L;
+        const bw = 0.1;
+
+        /*let Ln = 20*Math.log10(4*Math.PI*d*fc/lambda);
+        let Lw = 20*Math.log10((lambda/fc)/(2*Math.PI/beta));
+        let Latt = 10*Math.log10(Math.exp(-2*alpha*d));
+        let L = Math.pow(10.,(Ln + Lw + Latt)/10.);
+        let g  = 16-L;
+        const bw = 0.1;*/
+
+
+        // update generator
+        generator2.clear();
+        generator2.add_signal(fc, bw, g); // user signal
+
+        //generator.add_tone(fc,g);
+        generator2.generate(-100);
+        dataf = d3.range(0, nfft - 1).map(function (i) { return { "y": generator2.psd[i] } })
+        pathf2.datum(dataf).attr("d", linef2);
+
+        // draw line between markers
+        path2.datum(markers).attr("d", line2);
+
+        // update output numbers
+        document.querySelector('#pl2').value = d3.format(".3f")(L) + " dB";
+    }
+
 </script>
 </html>
